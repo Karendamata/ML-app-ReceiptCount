@@ -2,6 +2,8 @@ import tensorflow as tf
 import numpy as np
 import keras
 import streamlit as st
+import os 
+os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
 
 class MLP():
     def __init__(self):

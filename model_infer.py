@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 import keras
+import os 
+os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
 from matplotlib import pyplot as plt
 import matplotlib.dates as dates
 import calendar

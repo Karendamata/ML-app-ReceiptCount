@@ -3,6 +3,8 @@ from PIL import Image
 import streamlit as st
 from streamlit_lottie import st_lottie as stl
 import pandas as pd
+import os 
+os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
 from model_infer import ModelInference
 
 DATA_PATH = "dataset/data_daily.csv"
