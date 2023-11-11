@@ -104,7 +104,6 @@ class ModelInference():
         ax[1].bar(monthly_predicted.index, diff, color=colors)
         ax[1].set_title('Predicted Difference on Receipt Count from 2021 to '+str(int(self.data_entire[365:]['year'][0])))
         plt.savefig("images/Improvement21vs22.png")
-
-
-# if __name__ == "__main__":
-#     ModelInference(input_path=DATA_PATH, model_path = MODEL_PATH).model_results(training_size=0.8)
+        
+if __name__ == "__main__":
+    ModelInference(input_path=DATA_PATH).model_results(training_size=0.8)
