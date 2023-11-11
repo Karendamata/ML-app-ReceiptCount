@@ -28,11 +28,15 @@ class ModelInference():
         self.training_required=False
 
     def model_results(self, training_size):
-        
-        # print(self.data.head())
+        print(self.data.head())
+        print(self.data.shape)
         Processing.ead_plot(self, self.data)
         self.data_predictions = Processing.data_nxtYR(historical_df=self.data)
+        print(self.data_predictions.head())
+        print(self.data_predictions.shape)
         self.data_entire = Processing.twoyr_df(self, self.data, self.data_predictions)
+        print(self.data_entire.head())
+        print(self.data_entire.shape)
 
         self.df_training, self.df_testing = Processing.data_split(self, self.data, training_size)
 
@@ -42,7 +46,7 @@ class ModelInference():
         self.df_test_norm, self.test_max = Processing.normalize(self.df_testing[self.features + [self.output_variable]])
 
         model = MLP()
-
+        model.load_model(MODEL_PATH)
         if self.training_required!=False:
             training_history = model.training(self.df_train_norm, self.features, self.output_variable)
             
@@ -54,9 +58,6 @@ class ModelInference():
             ax.set_title("Training Loss x Validation Loss")
             plt.savefig("images/lossVSval_new.png")
             self.training_required==False
-        else:
-            model.load_model(MODEL_PATH)
-         
 
         pred_normalized = model.predict(self.df_entire_normalized, self.features)
         pred_not_normalized = Processing.inverse_normalize(pd.DataFrame(pred_normalized,columns=[self.output_variable]), self.data_max[[self.output_variable]])

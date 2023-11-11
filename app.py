@@ -27,7 +27,7 @@ def local_css(file_name):
 
 
 local_css("style/style.css")
-data_path = DATA_PATH
+# path_data = DATA_PATH
 
 # Figures and animations
 animation = lottie_load("https://lottie.host/839d8fa2-b863-4d77-84dd-5b1d9a9df1ed/g8T3P0Zs4T.json")
@@ -91,8 +91,9 @@ with st.container():
         if newdata_option=='Yes':
             uploaded_file = st.file_uploader("Choose a file")
             if uploaded_file is not None:
-                data_path = uploaded_file
-        ModelInference(input_path=data_path).model_results(training_size=0.8)
+                pd.read_csv(uploaded_file, index_col=0).to_csv("dataset/new.csv")
+                ModelInference(input_path="dataset/new.csv").model_results(training_size=0.8)
+                uploaded_file=None
         
 st.write("---")
 st.markdown("<h1 style='text-align: center; '>Analysis</h1>", unsafe_allow_html=True)

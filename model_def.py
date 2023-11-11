@@ -24,25 +24,11 @@ class MLP():
 
     def training(self, df, features, output_variable):
 
-        progress_text = "Training in Progress. Please wait."
-        my_bar = st.progress(0, text=progress_text)
-
-        patience = 20
-        min_delta=0.0001
-        loss_patience = []
-        loss_history = []
-        val_loss_history = []
-        for epoch in range(500):
-            trained_model = self.model.fit(df[features], df[[output_variable]], 
-                                        epochs=1, validation_split=0.2, verbose=0)
-            loss_history.append(trained_model.history['loss'][0])
-            val_loss_history.append(trained_model.history['val_loss'][0])
-            if int(len(loss_history)/patience)>=1:
-                    if np.mean(trained_model.history['loss'][-20:])/patience < min_delta:
-                        break
-            my_bar.progress(int((epoch + 1)/5), text=progress_text)
-        my_bar.text('Training Completed.')
-        return dict(loss=loss_history, val_loss=val_loss_history)
+        callback = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.00001, patience=20)
+        trained_model = self.model.fit(df[features], df[[output_variable]], 
+                                       epochs=500,validation_split=0.2,callbacks=callback)
+        self.model.save_weights("/checkpoints/my_checkpoint")
+        return trained_model.history
     
     def predict(self, df, features):
         predictions = self.model.predict(df[features], verbose=0)
