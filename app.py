@@ -1,5 +1,7 @@
 import requests
-from PIL import Image
+import time
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 import streamlit as st
 from streamlit_lottie import st_lottie as stl
 import pandas as pd
@@ -27,16 +29,15 @@ def local_css(file_name):
 
 
 local_css("style/style.css")
-# path_data = DATA_PATH
 
 # Figures and animations
 animation = lottie_load("https://lottie.host/839d8fa2-b863-4d77-84dd-5b1d9a9df1ed/g8T3P0Zs4T.json")
-training_data_img = Image.open("images/training_data.png")
-ModelResiduals_img = Image.open("images/modelExpectedVSPredicted.png")
-lossVSval_img = Image.open("images/lossVSval.png")
+# training_data_img = Image.open("images/training_data.png")
+# ModelResiduals_img = Image.open("images/modelExpectedVSPredicted.png")
+# lossVSval_img = Image.open("images/lossVSval.png")
 Improvement21vs22_img = Image.open("images/Improvement21vs22.png")
 ExpectedVSPredicted_img = Image.open("images/ExpectedVSPredicted.png")
-box_hist_img = Image.open("images/box_hist.png")
+# box_hist_img = Image.open("images/box_hist.png")
 
 # Introduction
 with st.container():
@@ -92,75 +93,69 @@ with st.container():
             uploaded_file = st.file_uploader("Choose a file")
             if uploaded_file is not None:
                 pd.read_csv(uploaded_file, index_col=0).to_csv("dataset/new.csv")
-                ModelInference(input_path="dataset/new.csv").model_results(training_size=0.8)
-                uploaded_file=None
-        
+                ModelInference(input_path="dataset/new.csv").model_results(training_size=0.8, training_required=True)
+                time.sleep(5)
+
 st.write("---")
-st.markdown("<h1 style='text-align: center; '>Analysis</h1>", unsafe_allow_html=True)
+# st.markdown("<h1 style='text-align: center; '>Analysis</h1>", unsafe_allow_html=True)
+
+# with st.container():
+#     st.write("---")
+#     st.markdown("<h1 style='text-align: center; '>Exploratory Data Analysis</h1>", unsafe_allow_html=True)
+#     st.write("""To start, I performed an exploratory data analysis to identify general patterns in the provided data and identify which data processing procedures are needed.
+#             For the 2021 data provided, there were no missing values nor outliers were detected. Moreover, the data appears to be normally distributed and 
+#             to have a very high and positive correlation between the dates and the number of receipts scanned. 
+#             At first look, I would try a simpler model for this data, such as Regression or a small Neural Network, since the data is relatively small and has a strong correlation 
+#             between the data provided.  
+#     """)
+
+# # st.header("Exploratory Data Analysis: ")
+# left_column, right_column = st.columns(2)
+# with left_column:
+#     st.image(training_data_img)
+# with right_column:
+#     st.image(box_hist_img)
+
+#             # Model
+#             # elif option == '🤖 Model Validation':
+# with st.container():
+#     st.write("---")
+#     st.markdown("<h1 style='text-align: center; '>Model Analysis</h1>", unsafe_allow_html=True)
+#     st.write(""" Once the Exploratory Data Analysis was performed, the data was then normalized and split into two parts to be used in a model. 
+#                         Then, a small neural network was built and trained. The plot on the left shows the training and validation losses, 
+#                         plotted to identify if overfitting happened during training. Both losses follow the same pattern without crossing lines, indicating that no overfitting happened.
+#                         The plot on the right shows the scatter plot between the expected and predicted values, which follows relatively close to the orange line (the perfect prediction). 
+#                         Two error metrics were also computed, displayed on the following dataframe.
+#                     """)
+#     error_df = pd.DataFrame()
+#     error_df['MSE'] = [4.1341e-04, 4439.594673006941]
+#     error_df['MAE'] = [0.0160, 171896.35819923133]
+#     error_df.index = ['Normalized Error', 'Not Normalized Error']
+#     st.dataframe(error_df)
+#     left_column, right_column = st.columns(2)
+#     with left_column:
+#         st.image(lossVSval_img)
+#     with right_column:
+#         st.image(ModelResiduals_img)
 
 
-option = st.selectbox(
-    'Which section would you like to visualize?',
-    ('📊 Data Exploration', '🤖 Model Validation', '📊 Predicted Results'))
-
-
-# Exploratory Data Analysis
-if option == '📊 Data Exploration':
-    with st.container():
-        st.markdown("<h1 style='text-align: center; '>Exploratory Data Analysis</h1>", unsafe_allow_html=True)
-        st.write("""To start, I performed an exploratory data analysis to identify general patterns in the provided data and identify which data processing procedures are needed.
-                 For the 2021 data provided, there were no missing values nor outliers were detected. Moreover, the data appears to be normally distributed and 
-                 to have a very high and positive correlation between the dates and the number of receipts scanned. 
-                 At first look, I would try a simpler model for this data, such as Regression or a small Neural Network, since the data is relatively small and has a strong correlation 
-                 between the data provided.  
-                 """)
-
-        # st.header("Exploratory Data Analysis: ")
-        left_column, right_column = st.columns(2)
-        with left_column:
-            st.image(training_data_img)
-        with right_column:
-            st.image(box_hist_img)
-
-# Model
-elif option == '🤖 Model Validation':
-    with st.container():
-        st.markdown("<h1 style='text-align: center; '>Model Analysis</h1>", unsafe_allow_html=True)
-        st.write(""" Once the Exploratory Data Analysis was performed, the data was then normalized and split into two parts to be used in a model. 
-                 Then, a small neural network was built and trained. The plot on the left shows the training and validation losses, 
-                 plotted to identify if overfitting happened during training. Both losses follow the same pattern without crossing lines, indicating that no overfitting happened.
-                 The plot on the right shows the scatter plot between the expected and predicted values, which follows relatively close to the orange line (the perfect prediction). 
-                 Two error metrics were also computed, displayed on the following dataframe.
-        """)
-        error_df = pd.DataFrame()
-        error_df['MSE'] = [4.1341e-04, 4439.594673006941]
-        error_df['MAE'] = [0.0160, 171896.35819923133]
-        error_df.index = ['Normalized Error', 'Not Normalized Error']
-        st.dataframe(error_df)
-        left_column, right_column = st.columns(2)
-        with left_column:
-            st.image(lossVSval_img)
-        with right_column:
-            st.image(ModelResiduals_img)
-
-
-# Predicted results
-else:
-    with st.container():
-        st.markdown("<h1 style='text-align: center; '>Predicted results</h1>", unsafe_allow_html=True)
-        st.write("""Since the model validation showed good results, the possible predicted number of receipt counts can be considered.
-                The plot on the left shows the number of receipts scanned during the year 2021 in blue, and the model predictions are shown in red. 
-                 For many, the performance of the model considering the training data set is not important. However, important insight about the model can be 
-                 taken from this training data set. In this case, it seems that the model can learn the pattern in the data. The top plot on the right shows
-                 the monthly scanned receipt count during the previous year (2021) and the predicted count for the upcoming year (2022). The bottom plot on the right shows the predicted increase (green) and decrease (red) 
-                 in the monthly receipt count for the upcoming year. This plot specifically is very useful for identifying possible changes in the company's demand, facilitating risk assessment, and planning 
-                 activities that might improve the company's business.
-                 """)
-        left_column, right_column = st.columns(2)
-        with left_column:
-            st.image(ExpectedVSPredicted_img)
-        with right_column:
-            st.image(Improvement21vs22_img)
+    # Predicted results
+with st.container():
+    st.write("---")
+    st.markdown("<h1 style='text-align: center; '>Predicted results</h1>", unsafe_allow_html=True)
+    st.write("""Since the model validation showed good results, the possible predicted number of receipt counts can be considered.
+                        The plot on the left shows the number of receipts scanned during the year 2021 in blue, and the model predictions are shown in red. 
+                        For many, the performance of the model considering the training data set is not important. However, important insight about the model can be 
+                        taken from this training data set. In this case, it seems that the model can learn the pattern in the data. The top plot on the right shows
+                        the monthly scanned receipt count during the previous year (2021) and the predicted count for the upcoming year (2022). The bottom plot on the right shows the predicted increase (green) and decrease (red) 
+                        in the monthly receipt count for the upcoming year. This plot specifically is very useful for identifying possible changes in the company's demand, facilitating risk assessment, and planning 
+                        activities that might improve the company's business.
+    """)
+    left_column, right_column = st.columns(2)
+    with left_column:
+        st.image(ExpectedVSPredicted_img)
+    with right_column:
+        st.image(Improvement21vs22_img)
 
 # Contact form
 with st.container():

@@ -25,9 +25,9 @@ class ModelInference():
         self.features.remove(self.output_variable)
         self.features.remove('# Date')
         self.features_num = len(self.features)
-        self.training_required=False
+        # self.training_required=False
 
-    def model_results(self, training_size):
+    def model_results(self, training_size, training_required=False):
         print(self.data.head())
         print(self.data.shape)
         Processing.ead_plot(self, self.data)
@@ -46,8 +46,8 @@ class ModelInference():
         self.df_test_norm, self.test_max = Processing.normalize(self.df_testing[self.features + [self.output_variable]])
 
         model = MLP()
-        model.load_model(MODEL_PATH)
-        if self.training_required!=False:
+
+        if training_required!=False:
             training_history = model.training(self.df_train_norm, self.features, self.output_variable)
             
             # Analyzing training and validation losses to verify if overfitting has occurred.
@@ -56,8 +56,10 @@ class ModelInference():
             ax.plot(training_history['loss'])
             ax.plot(training_history['val_loss'])
             ax.set_title("Training Loss x Validation Loss")
-            plt.savefig("images/lossVSval_new.png")
-            self.training_required==False
+            plt.savefig("images/lossVSval.png")
+            training_required==False
+        else:
+            model = model.load_model()
 
         pred_normalized = model.predict(self.df_entire_normalized, self.features)
         pred_not_normalized = Processing.inverse_normalize(pd.DataFrame(pred_normalized,columns=[self.output_variable]), self.data_max[[self.output_variable]])
@@ -109,4 +111,4 @@ class ModelInference():
         plt.savefig("images/Improvement21vs22.png")
         
 if __name__ == "__main__":
-    ModelInference(input_path=DATA_PATH).model_results(training_size=0.8)
+    ModelInference(input_path=DATA_PATH).model_results(training_size=0.8, training_required=False)
