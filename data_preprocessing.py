@@ -14,12 +14,11 @@ class Processing():
         self.data = df
         self.m, self.n = df.shape
         self.output_variable = 'Receipt_Count'
-        self.features = list(self.data.columns)
-        self.features.remove(self.output_variable)
-        self.features.remove('# Date')       
+        self.features = list('year', 'month', 'day')       
 
     def data_read(data_path):
         df_daily = pd.read_csv(data_path, parse_dates=True) # reading data from csv file
+        list(df_daily.columns)
         df_daily[['year', 'month', 'day']] = df_daily['# Date'].str.split('-', expand=True)
         df_daily[['year', 'month', 'day']] = df_daily[['year', 'month', 'day']].apply(np.float64)
         df_daily['# Date'] = pd.to_datetime(df_daily['# Date'])

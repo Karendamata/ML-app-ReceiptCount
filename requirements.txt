@@ -7,3 +7,4 @@ Requests==2.31.0
 streamlit==1.28.1
 streamlit_lottie==0.0.5
 tensorflow==2.13.0
+

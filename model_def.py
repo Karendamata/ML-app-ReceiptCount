@@ -21,7 +21,6 @@ class MLP():
                            metrics='mae')
     
     def load_model(self):
-        print("model loaded.")
         return tf.keras.models.load_model('save-models/my-model.keras')
 
     def training(self, df, features, output_variable):
@@ -33,6 +32,6 @@ class MLP():
         # self.model.save_weights("/checkpoints/my_checkpoint")
         return trained_model.history
     
-    def predict(self, df, features):
-        predictions = self.model.predict(df[features], verbose=0)
+    def predict(self, df):
+        predictions = self.model.predict(df, verbose=0)
         return predictions

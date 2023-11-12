@@ -9,7 +9,6 @@ import matplotlib.dates as dates
 import calendar
 from data_preprocessing import Processing
 from model_def import MLP
-# from model.utils import load_model
 
 
 DATA_PATH = "dataset/data_daily.csv"
@@ -21,30 +20,23 @@ class ModelInference():
         self.data = Processing.data_read(input_path)
         self.m, self.n = self.data.shape
         self.output_variable = 'Receipt_Count'
-        self.features = list(self.data.columns)
-        self.features.remove(self.output_variable)
-        self.features.remove('# Date')
+        self.features = ['year', 'month', 'day']
         self.features_num = len(self.features)
-        # self.training_required=False
 
     def model_results(self, training_size, training_required=False):
-        print(self.data.head())
-        print(self.data.shape)
+
         Processing.ead_plot(self, self.data)
         self.data_predictions = Processing.data_nxtYR(historical_df=self.data)
-        print(self.data_predictions.head())
-        print(self.data_predictions.shape)
+
         self.data_entire = Processing.twoyr_df(self, self.data, self.data_predictions)
-        print(self.data_entire.head())
-        print(self.data_entire.shape)
+
 
         self.df_training, self.df_testing = Processing.data_split(self, self.data, training_size)
 
         self.data_norm, self.data_max = Processing.normalize(self.data[self.features + [self.output_variable]])
         self.df_entire_normalized, self.df_entire_max = Processing.normalize(self.data_entire[self.features])
         self.df_train_norm, self.train_max = Processing.normalize(self.df_training[self.features + [self.output_variable]])
-        self.df_test_norm, self.test_max = Processing.normalize(self.df_testing[self.features + [self.output_variable]])
-
+        
         model = MLP()
 
         if training_required!=False:
@@ -61,7 +53,7 @@ class ModelInference():
         else:
             model = model.load_model()
 
-        pred_normalized = model.predict(self.df_entire_normalized, self.features)
+        pred_normalized = model.predict(self.df_entire_normalized)
         pred_not_normalized = Processing.inverse_normalize(pd.DataFrame(pred_normalized,columns=[self.output_variable]), self.data_max[[self.output_variable]])
 
         #Analyzing the model residuals
