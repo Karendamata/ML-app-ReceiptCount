@@ -47,7 +47,7 @@ Make sure to be in the same directory as the project.
 ** ***The Application will be accessible on http://localhost:8501/*** **
 
 More instructions are written in the web application. The results initially shown were achieved using the 2021 data set. A new data set can be uploaded for more results. Here is what it will look like: 
-![Display Image](https://github.com/Karendamata/ML-app-ReceiptCount/tree/main/website.png)
+![website](website.png)
 ## Authors
 
 - [@karendamata](https://www.github.com/karendamata)
