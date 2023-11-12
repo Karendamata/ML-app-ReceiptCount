@@ -46,7 +46,7 @@ with st.container():
                      applications for predictive analytics and image processing (CNN and GAN) using Python and 
                      several frameworks such as TensorFlow, Keras, Scikit-Learn, NumPy, and Pandas. 
                      I have strong analytical and problem-solving skills, as well as quantitative research 
-                     and predictive analytics experience. I am passionate about in designing, developing, 
+                     and predictive analytics experience. I am passionate about designing, developing, 
                      and implementing new machine-learning applications to solve real-world problems and contribute 
                      to decision-making processes. Feel free to connect with me on my [LinkedIn](https://www.linkedin.com/in/karendamata/)!""")
     with right_column:
@@ -59,12 +59,11 @@ with st.container():
     left_column, right_column = st.columns((1, 1))
     with left_column:
         st.write(
-            """At fetch, the number of scanned receipts to their app on 
-            a daily base is monitored as one of our KPIs. From a business standpoint, the possible
-            predicted number of scanned receipts for a given future month is needed. 
-            The number of observed scanned receipts each day for the year 2021 was provided. 
-            Based on this prior knowledge, an algorithm that can predict the approximate number 
-            of scanned receipts for each month of 2022 was developed.""")
+            """At fetch, the number of scanned receipts to their app on a daily base is 
+            monitored as one of their KPIs. From a business standpoint, the possible predicted 
+            number of receipts scanned for a given future month is needed. The number of scanned receipts 
+            in each day of 2021 was provided. Based on this prior knowledge, an algorithm that can predict 
+            the approximate number of scanned receipts for each month of 2022 was developed.""")
     with right_column:
         st.write("""As mentioned in the left, 
                  The number of receipts scanned during the year of 2021 was provided. 
@@ -106,6 +105,7 @@ st.markdown("<h1 style='text-align: center; '>Analysis</h1>", unsafe_allow_html=
 
 with st.container():
     st.write("---")
+<<<<<<< HEAD
     st.markdown("<h1 style='text-align: center; '>Exploratory Data Analysis</h1>", unsafe_allow_html=True)
     st.write("""To start, I performed an exploratory data analysis to identify general patterns in the provided data and identify which data processing procedures are needed.
             For the 2021 data provided, there were no missing values nor outliers were detected. Moreover, the data appears to be normally distributed and 
@@ -155,6 +155,29 @@ with st.container():
                         the monthly scanned receipt count during the previous year (2021) and the predicted count for the upcoming year (2022). The bottom plot on the right shows the predicted increase (green) and decrease (red) 
                         in the monthly receipt count for the upcoming year. This plot specifically is very useful for identifying possible changes in the company's demand, facilitating risk assessment, and planning 
                         activities that might improve the company's business.
+=======
+    st.write("""Before training a model, an exploratory data analysis was performed on the data 
+             provided to identify general patterns and data processing procedures needed. The data 
+             does not have missing values and appears to be normally distributed. Moreover, there 
+             is a strong positive correlation between the dates and the number of receipts scanned. 
+             For this reason, At first look, a small Neural Network was built since the data is relatively 
+             small and has a strong correlation between the data provided. The data was then normalized and 
+             split into two parts for model validation. Since the purpose of this page is to run inference 
+             on the model, the results of these steps are not shown here. If the reader is interested in seeing 
+             these results, please refer to the GitHub repository. The plot results are shown in the ["images" folder](https://github.com/Karendamata/ML-app-ReceiptCount/tree/main/images). """)
+    st.write("---")
+    st.markdown("<h1 style='text-align: center; '> Results</h1>", unsafe_allow_html=True)
+    st.write("""
+                The plot on the left shows the number of receipts scanned during 2021 in blue and the model 
+             predictions in red. For many, the model's performance considering the training data set is not 
+             important. However, important insight about the model can be taken from this training data set. 
+             In this case, it seems that the model can learn the pattern in the data. The top plot on the right 
+             shows the monthly scanned receipt count during the previous year (2021) and the predicted count 
+             for the upcoming year (2022). The bottom plot on the right shows the predicted increase (green) 
+             and decrease (red) in the monthly receipt count for the upcoming year. This plot specifically 
+             is very useful for identifying possible changes in the company's demand, facilitating risk assessment, 
+             and planning activities that might improve the company's business.
+>>>>>>> 8bd1db1a9cb37059e4571b92257f326020fd82d7
     """)
     left_column, right_column = st.columns(2)
     with left_column:
